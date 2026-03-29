@@ -30,6 +30,7 @@
                 <!-- Aca va el formulario -->
                 <form action="/guardar" method="post" autocomplete="off">
                     {{ forma.csrf_token }}
+                    {{ forma.hidden_tag() }}
                     <!-- Valor id -->
                     <!-- <input type="hidden" name="id" id="id" value="{{ forma.id.data }}"/> -->
                      {{ forma.id(class_="form-control", id="id", type="hidden") }}

@@ -3,6 +3,7 @@ from cliente_dao import ClienteDAO
 from cliente import Cliente
 from cliente_forma import ClienteForma
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'holaMundo123'
 
@@ -23,21 +24,19 @@ def inicio():
 
 @app.route('/guardar', methods=['POST'])
 def guardar():
-    # Creamos los objetos de cliente
+    cliente_forma = ClienteForma()
+    print(cliente_forma.errors)
     cliente = Cliente()
-    cliente_forma = ClienteForma(obj=cliente)
-    if cliente_forma.validate_on_submit():
+    cliente_forma.populate_obj(cliente)
+    print('entro al if ')
+    if not cliente.id:
+        print('Insertando cliente')
+        ClienteDAO.insertar(cliente)
+    else:
+        print('Actualizando cliente')
+        ClienteDAO.actualizar(cliente)
 
-        # llenamos el objeto cliente con los datos del formulario
-        cliente_forma.populate_obj(cliente)
-        if not cliente.id:
-        #  Guardamos el cliente en la base de datos 
-            ClienteDAO.insertar(cliente)
-        else:
-            ClienteDAO.actualizar(cliente)
-    # Redireccionar a la pagina de inicio
     return redirect(url_for('inicio'))
-
 
 @app.route('/limpiar')
 def limpiar():
@@ -46,6 +45,8 @@ def limpiar():
 
 @app.route('/editar/<int:id>')
 def editar(id):
+    if id is not None:
+        print(f'Editando cliente con id: {id}')
     cliente = ClienteDAO.seleccionar_por_id(id)
     clienteForma = ClienteForma(obj=cliente)
     clientes_db = ClienteDAO.seleccionar()

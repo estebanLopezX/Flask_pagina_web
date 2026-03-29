@@ -37,6 +37,7 @@ class ClienteDAO:
         try:
             conexion = Conexion.obtener_conexion()
             cursor = conexion.cursor()
+            print('Ejecutando insertar cliente')
             valores = (cliente.nombre, cliente.apellido, cliente.membresia)
             cursor.execute(cls.INSERTAR, valores)
             conexion.commit()
